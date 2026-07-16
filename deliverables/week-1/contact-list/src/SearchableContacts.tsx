@@ -20,9 +20,7 @@ export function SearchableContacts() {
                 contact.name.toLowerCase().includes(searchTerm) ||
                 contact.email.toLowerCase().includes(searchTerm),
             );
-            if (resultContacts.length > 0) {
-              setContacts(resultContacts);
-            }
+            setContacts(resultContacts);
           }}
         />
       </label>
