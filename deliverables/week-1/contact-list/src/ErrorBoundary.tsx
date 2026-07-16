@@ -1,18 +1,32 @@
-import { Component, type ErrorInfo, type ReactNode } from 'react'
+import { Component, type ErrorInfo, type ReactNode } from "react";
 
 interface Props {
-  children: ReactNode
-  fallback?: ReactNode
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+interface ErrorState {
+  error: Error | null;
 }
 
-// TODO: catch render errors from children and show a role="alert" fallback
-// containing "Something went wrong". Right now it just renders children (no catching).
-export class ErrorBoundary extends Component<Props> {
+export class ErrorBoundary extends Component<Props, ErrorState> {
+  state: ErrorState = { error: null };
   componentDidCatch(_error: Error, _info: ErrorInfo) {
-    // TODO
+    console.log("ErrorBoundary caught an error:", _error);
+  }
+
+  static getDerivedStateFromError(_error: Error) {
+    return { error: _error };
   }
 
   render() {
-    return this.props.children
+    return this.state.error ? (
+      this.props.fallback ? (
+        this.props.fallback
+      ) : (
+        <div role="alert">Something went wrong</div>
+      )
+    ) : (
+      this.props.children
+    );
   }
 }

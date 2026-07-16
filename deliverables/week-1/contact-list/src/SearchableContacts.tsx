@@ -1,7 +1,40 @@
-import { initialContacts } from './types'
+import { initialContacts } from "./types";
+import { ContactList } from "./ContactList";
+import { ContactForm } from "./ContactForm";
+import { useState } from "react";
+import { NewContact } from "./types";
 
-// TODO: manage contact state; render a "Search contacts" input that filters by
-// name or email (case-insensitive); render ContactList and ContactForm (adding appends).
 export function SearchableContacts() {
-  return <div>TODO: SearchableContacts ({initialContacts.length} contacts)</div>
+  const [contacts, setContacts] = useState(initialContacts);
+  return (
+    <div>
+      <label>
+        Search contacts:
+        <input
+          type="text"
+          name="search"
+          onChange={(event) => {
+            const searchTerm = event.currentTarget.value;
+            const resultContacts = initialContacts.filter(
+              (contact) =>
+                contact.name.toLowerCase().includes(searchTerm) ||
+                contact.email.toLowerCase().includes(searchTerm),
+            );
+            if (resultContacts.length > 0) {
+              setContacts(resultContacts);
+            }
+          }}
+        />
+      </label>
+      <ContactList contacts={contacts} />
+      <ContactForm
+        onAdd={(newContact: NewContact) =>
+          setContacts([
+            ...contacts,
+            { ...newContact, id: String(contacts.length + 1) },
+          ])
+        }
+      />
+    </div>
+  );
 }
