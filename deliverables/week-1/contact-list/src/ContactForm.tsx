@@ -10,9 +10,7 @@ function formToContact(formData: FormData): NewContact {
 }
 
 function validateEmail(email: string) {
-  return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-    email,
-  );
+  return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$/.test(email);
 }
 
 function validateContact(contact: NewContact): string {
