@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useMemo, useReducer } from "react";
 import {
-  CartAction,
   cartReducer,
   type CartState,
   initialCart,
@@ -27,39 +26,35 @@ export function CartProvider({
 
   const total = selectTotal(state);
 
-  const add = (item: { id: string; name: string; price: number }) => {
-    dispatch({
-      type: "add",
-      item,
-    });
-  };
-
-  const remove = (id: string) => {
-    dispatch({
-      type: "remove",
-      id,
-    });
-  };
-
-  const setQty = (id: string, qty: number) => {
-    dispatch({
-      type: "setQty",
-      id,
-      qty,
-    });
-  };
-
-  const clear = () => {
-    dispatch({
-      type: "clear",
-    });
-  };
-
-  return (
-    <CartContext.Provider value={{ state, total, add, remove, setQty, clear }}>
-      {children}
-    </CartContext.Provider>
+  const value = useMemo<CartApi>(
+    () => ({
+      state,
+      total,
+      add: (item) =>
+        dispatch({
+          type: "add",
+          item,
+        }),
+      remove: (id) =>
+        dispatch({
+          type: "remove",
+          id,
+        }),
+      setQty: (id, qty) =>
+        dispatch({
+          type: "setQty",
+          id,
+          qty,
+        }),
+      clear: () =>
+        dispatch({
+          type: "clear",
+        }),
+    }),
+    [state, total],
   );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
 export function useCart(): CartApi {
