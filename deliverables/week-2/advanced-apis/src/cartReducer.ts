@@ -17,28 +17,40 @@ export type CartAction =
 
 export const initialCart: CartState = { items: [] };
 
+function handleAdd(
+  items: CartItem[],
+  item: { id: string; name: string; price: number },
+) {
+  return items.some((cartItem) => cartItem.id === item.id)
+    ? items.map((cartItem) =>
+        cartItem.id === item.id
+          ? { ...cartItem, qty: cartItem.qty + 1 }
+          : cartItem,
+      )
+    : [
+        ...items,
+        {
+          ...item,
+          qty: 1,
+        },
+      ];
+}
+
+function handleQty(items: CartItem[], id: string, qty: number) {
+  return qty > 0
+    ? items.map((cartItem) =>
+        cartItem.id === id ? { ...cartItem, qty: qty } : cartItem,
+      )
+    : items.filter((cartItem) => cartItem.id !== id);
+}
+
 export function cartReducer(state: CartState, _action: CartAction): CartState {
   switch (_action.type) {
     case "add":
-      return state.items.some((cartItem) => cartItem.id === _action.item.id)
-        ? {
-            ...state,
-            items: state.items.map((cartItem) =>
-              cartItem.id === _action.item.id
-                ? { ...cartItem, qty: cartItem.qty + 1 }
-                : cartItem,
-            ),
-          }
-        : {
-            ...state,
-            items: [
-              ...state.items,
-              {
-                ..._action.item,
-                qty: 1,
-              },
-            ],
-          };
+      return {
+        ...state,
+        items: handleAdd(state.items, _action.item),
+      };
 
     case "remove":
       return {
@@ -47,19 +59,10 @@ export function cartReducer(state: CartState, _action: CartAction): CartState {
       };
 
     case "setQty":
-      return _action.qty > 0
-        ? {
-            ...state,
-            items: state.items.map((cartItem) =>
-              cartItem.id === _action.id
-                ? { ...cartItem, qty: _action.qty }
-                : cartItem,
-            ),
-          }
-        : {
-            ...state,
-            items: state.items.filter((cartItem) => cartItem.id !== _action.id),
-          };
+      return {
+        ...state,
+        items: handleQty(state.items, _action.id, _action.qty),
+      };
 
     case "clear":
       return {
