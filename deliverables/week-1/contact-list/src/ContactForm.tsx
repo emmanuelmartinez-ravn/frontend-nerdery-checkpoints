@@ -1,5 +1,6 @@
 import type { NewContact } from "./types";
 import { useState } from "react";
+import "./ContactForm.css";
 
 function formToContact(formData: FormData): NewContact {
   return {
@@ -27,65 +28,73 @@ function validateContact(contact: NewContact): string {
   return errors.join(" & ");
 }
 
+function handleSubmit(
+  event: React.SubmitEvent<HTMLFormElement>,
+  onAdd: (contact: NewContact) => void,
+  setError: React.Dispatch<React.SetStateAction<string>>,
+) {
+  event.preventDefault();
+
+  const formData = new FormData(event.currentTarget);
+  const newContact = formToContact(formData);
+
+  const error = validateContact(newContact);
+
+  setError(error);
+
+  if (error) {
+    return;
+  }
+
+  onAdd(newContact);
+}
+
 export function ContactForm({
   onAdd,
 }: {
-  onAdd: (contact: NewContact) => void;
+  readonly onAdd: (contact: NewContact) => void;
 }) {
   const [error, setError] = useState("");
 
-  function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-    const newContact = formToContact(formData);
-
-    const errors = validateContact(newContact);
-
-    setError(errors);
-
-    if (errors !== "") {
-      return;
-    }
-
-    onAdd(newContact);
-  }
-
   return (
     <form
-      onSubmit={(event) => {
-        handleSubmit(event);
-      }}
+      onSubmit={(event) => handleSubmit(event, onAdd, setError)}
+      className="contact-form"
     >
+      <h2>Add Contact</h2>
       <label>
-        Name:
+        <span>Name</span>
         <input
           type="text"
           name="name"
           onChange={() => {
             setError("");
           }}
+          placeholder="John Doe"
         />
       </label>
-      <label>
-        Email:
-        <input
-          type="email"
-          name="email"
-          onChange={() => {
-            setError("");
-          }}
-        />
-      </label>
+      <div className="email-and-role">
+        <label>
+          <span>Email</span>
+          <input
+            type="email"
+            name="email"
+            onChange={() => {
+              setError("");
+            }}
+            placeholder="john@example.com"
+          />
+        </label>
+        <label>
+          <span>Role</span>
+          <input type="text" name="role" placeholder="Engineer"></input>
+        </label>
+      </div>
       {error && (
         <span role="alert" style={{ color: "red" }}>
           {error}
         </span>
       )}
-      <label>
-        Role:
-        <input type="text" name="role"></input>
-      </label>
       <button type="submit">Add Contact</button>
     </form>
   );

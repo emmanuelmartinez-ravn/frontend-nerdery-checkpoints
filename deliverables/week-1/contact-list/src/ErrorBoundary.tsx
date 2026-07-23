@@ -19,14 +19,16 @@ export class ErrorBoundary extends Component<Props, ErrorState> {
   }
 
   render() {
-    return this.state.error ? (
-      this.props.fallback ? (
-        this.props.fallback
-      ) : (
+    let content;
+
+    if (this.state.error) {
+      content = this.props.fallback ?? (
         <div role="alert">Something went wrong</div>
-      )
-    ) : (
-      this.props.children
-    );
+      );
+    } else {
+      content = this.props.children;
+    }
+
+    return content;
   }
 }

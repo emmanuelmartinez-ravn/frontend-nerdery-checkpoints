@@ -1,8 +1,8 @@
-import { initialContacts } from "./types";
+import { initialContacts, NewContact } from "./types";
 import { ContactList } from "./ContactList";
 import { ContactForm } from "./ContactForm";
 import { useState } from "react";
-import { NewContact } from "./types";
+import "./SearchableContacts.css";
 
 export function SearchableContacts() {
   const [contacts, setContacts] = useState(initialContacts);
@@ -15,26 +15,38 @@ export function SearchableContacts() {
   );
 
   return (
-    <div>
-      <label>
-        Search contacts:
-        <input
-          type="text"
-          name="search"
-          onChange={(event) => {
-            setSearchTerm(event.target.value);
+    <div className="searchable-contacts">
+      <section className="search-bar">
+        <label>
+          <span>Search contacts</span>
+          <input
+            type="text"
+            name="search"
+            onChange={(event) => {
+              setSearchTerm(event.target.value);
+            }}
+            placeholder="Filter by name or email..."
+            className="search"
+          />
+        </label>
+      </section>
+      <section className="contacts">
+        <ContactList contacts={resultContacts} />
+      </section>
+      <section className="add-contact">
+        <ContactForm
+          onAdd={(newContact: NewContact) => {
+            const lastContact = contacts.at(-1);
+            setContacts([
+              ...contacts,
+              {
+                ...newContact,
+                id: lastContact ? String(Number(lastContact.id) + 1) : "1",
+              },
+            ]);
           }}
         />
-      </label>
-      <ContactList contacts={resultContacts} />
-      <ContactForm
-        onAdd={(newContact: NewContact) =>
-          setContacts([
-            ...contacts,
-            { ...newContact, id: String(contacts[contacts.length - 1].id + 1) },
-          ])
-        }
-      />
+      </section>
     </div>
   );
 }
