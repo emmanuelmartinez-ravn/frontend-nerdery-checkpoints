@@ -4,7 +4,7 @@
   --color-tertiary: #434655;
 }
 
-h1 {
+.contact-title {
   font-size: 2rem;
   color: var(--color-primary);
   font-weight: 500;

@@ -2,7 +2,7 @@
   margin: 0 1rem;
 }
 
-label {
+.contact-label {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -16,7 +16,7 @@ label {
   padding: 0.5rem 1.5rem;
 }
 
-input:focus-visible {
+.search:focus-visible {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 1px var(--color-primary);

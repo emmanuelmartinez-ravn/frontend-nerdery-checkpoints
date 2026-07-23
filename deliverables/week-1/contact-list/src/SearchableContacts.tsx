@@ -17,7 +17,7 @@ export function SearchableContacts() {
   return (
     <div className="searchable-contacts">
       <section className="search-bar">
-        <label>
+        <label className="contact-label">
           <span>Search contacts</span>
           <input
             type="text"

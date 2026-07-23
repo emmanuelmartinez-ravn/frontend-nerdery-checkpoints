@@ -13,7 +13,7 @@ export default function Demo() {
         padding: "0 1rem",
       }}
     >
-      <h1>Contact List</h1>
+      <h1 className="contact-title">Contact List</h1>
       <ErrorBoundary>
         <SearchableContacts />
       </ErrorBoundary>

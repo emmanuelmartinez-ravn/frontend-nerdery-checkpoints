@@ -61,9 +61,9 @@ export function ContactForm({
       onSubmit={(event) => handleSubmit(event, onAdd, setError)}
       className="contact-form"
     >
-      <h2>Add Contact</h2>
-      <label>
-        <span>Name</span>
+      <h2 className="contact-form-title">Add Contact</h2>
+      <label className="contact-label">
+        <span className="contact-form-label">Name</span>
         <input
           type="text"
           name="name"
@@ -71,11 +71,12 @@ export function ContactForm({
             setError("");
           }}
           placeholder="John Doe"
+          className="contact-form-input"
         />
       </label>
       <div className="email-and-role">
-        <label>
-          <span>Email</span>
+        <label className="contact-label">
+          <span className="contact-form-label">Email</span>
           <input
             type="email"
             name="email"
@@ -83,11 +84,17 @@ export function ContactForm({
               setError("");
             }}
             placeholder="john@example.com"
+            className="contact-form-input"
           />
         </label>
-        <label>
-          <span>Role</span>
-          <input type="text" name="role" placeholder="Engineer"></input>
+        <label className="contact-label">
+          <span className="contact-form-label">Role</span>
+          <input
+            type="text"
+            name="role"
+            placeholder="Engineer"
+            className="contact-form-input"
+          ></input>
         </label>
       </div>
       {error && (
@@ -95,7 +102,9 @@ export function ContactForm({
           {error}
         </span>
       )}
-      <button type="submit">Add Contact</button>
+      <button type="submit" className="contact-form-submit">
+        Add Contact
+      </button>
     </form>
   );
 }
