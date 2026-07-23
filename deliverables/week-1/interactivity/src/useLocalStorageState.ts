@@ -1,27 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+function getItem<T>(key: string, value: T): T {
+  try {
+    const storedValue = localStorage.getItem(key);
+
+    return storedValue ? JSON.parse(storedValue) : value;
+  } catch {
+    return value;
+  }
+}
 
 export function useLocalStorageState<T>(
   key: string,
   initialValue: T,
-): [T, (value: T | ((prev: T) => T)) => void] {
+): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [localStorageValue, setLocalStorageValue] = useState<T>(() => {
-    const lastLocalStorageValue = localStorage.getItem(key);
-    try {
-      if (lastLocalStorageValue) {
-        const parsedLocalStorageValue = JSON.parse(lastLocalStorageValue);
-        return parsedLocalStorageValue;
-      }
-    } catch {
-      return initialValue;
-    }
-    return initialValue;
+    return getItem(key, initialValue);
   });
 
-  const setValue = (value: T | ((prev: T) => T)): void => {
-    const newValue =
-      value instanceof Function ? value(localStorageValue) : value;
-    setLocalStorageValue(newValue);
-    localStorage.setItem(key, JSON.stringify(newValue));
-  };
-  return [localStorageValue, setValue];
+  const [prevKey, setPrevKey] = useState(key);
+  if (key !== prevKey) {
+    setPrevKey(key);
+    setLocalStorageValue(getItem(key, initialValue));
+  }
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(localStorageValue));
+  }, [key, localStorageValue]);
+
+  return [localStorageValue, setLocalStorageValue];
 }

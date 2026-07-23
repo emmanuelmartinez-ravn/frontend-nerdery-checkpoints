@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useDebouncedValue } from "./useDebouncedValue";
+import "./DebouncedSearch.css";
 
 export function DebouncedSearch() {
   const inputId = useId();
@@ -13,7 +14,7 @@ export function DebouncedSearch() {
   const debouncedValue = useDebouncedValue(query, 300);
 
   return (
-    <div>
+    <section className="debounced-search">
       <label htmlFor={inputId}>Search</label>
       <input
         id={inputId}
@@ -21,8 +22,9 @@ export function DebouncedSearch() {
         ref={inputRef}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search..."
       ></input>
-      <span>Searching:{debouncedValue}</span>
-    </div>
+      <span>Searching: {debouncedValue}</span>
+    </section>
   );
 }
