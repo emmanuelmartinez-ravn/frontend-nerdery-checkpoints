@@ -42,7 +42,7 @@ export function UsersView() {
       key={key}
     >
       <h2 className="suspense-subtitle">Users</h2>
-      <Suspense fallback={<p>"Loading…"</p>}>
+      <Suspense fallback={<p className="suspense-loading">Loading…</p>}>
         <UsersList></UsersList>
       </Suspense>
     </ErrorBoundary>
