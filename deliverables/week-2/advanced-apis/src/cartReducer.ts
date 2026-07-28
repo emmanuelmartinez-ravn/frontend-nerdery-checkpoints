@@ -13,7 +13,8 @@ export type CartAction =
   | { type: "add"; item: { id: string; name: string; price: number } }
   | { type: "remove"; id: string }
   | { type: "setQty"; id: string; qty: number }
-  | { type: "clear" };
+  | { type: "clear" }
+  | { type: "newOperation" };
 
 export const initialCart: CartState = { items: [] };
 
@@ -69,6 +70,13 @@ export function cartReducer(state: CartState, _action: CartAction): CartState {
         ...state,
         items: [],
       };
+    case "newOperation":
+      return {
+        ...state,
+      };
+    default:
+      const _e: never = _action;
+      return _e;
   }
 }
 
