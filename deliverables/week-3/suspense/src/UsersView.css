@@ -1,0 +1,30 @@
+.suspense-subtitle {
+  font-size: 1.5rem;
+  color: var(--color-tertiary);
+  font-weight: 500;
+}
+
+.suspense-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-tertiary);
+  border-radius: 0.5rem;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.suspense-list li {
+  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .suspense-list {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

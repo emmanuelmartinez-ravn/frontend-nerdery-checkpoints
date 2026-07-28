@@ -1,6 +1,8 @@
 import { Suspense, use, useState } from "react";
 import { User, fetchUsers } from "./api";
 import { ErrorBoundary } from "./ErrorBoundary";
+import "./UsersView.css";
+
 let usersCache: Promise<User[]> | undefined;
 
 function getUsers(): Promise<User[]> {
@@ -18,7 +20,7 @@ function UsersList() {
   const users = use(getUsers());
 
   return (
-    <ul>
+    <ul className="suspense-list">
       {users.map((user) => (
         <li key={user.id}>{user.name}</li>
       ))}
@@ -39,7 +41,8 @@ export function UsersView() {
       }
       key={key}
     >
-      <Suspense fallback="Loading…">
+      <h2 className="suspense-subtitle">Users</h2>
+      <Suspense fallback={<p>"Loading…"</p>}>
         <UsersList></UsersList>
       </Suspense>
     </ErrorBoundary>
