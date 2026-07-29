@@ -1,30 +1,30 @@
-import React, { createContext, useContext, useMemo, useReducer } from "react";
+import React, { createContext, useContext, useMemo, useReducer } from 'react'
 import {
   cartReducer,
   type CartState,
   initialCart,
   selectTotal,
-} from "./cartReducer";
+} from './cartReducer'
 
 export interface CartApi {
-  state: CartState;
-  total: number;
-  add: (item: { id: string; name: string; price: number }) => void;
-  remove: (id: string) => void;
-  setQty: (id: string, qty: number) => void;
-  clear: () => void;
+  state: CartState
+  total: number
+  add: (item: { id: string; name: string; price: number }) => void
+  remove: (id: string) => void
+  setQty: (id: string, qty: number) => void
+  clear: () => void
 }
 
-const CartContext = createContext<CartApi | null>(null);
+const CartContext = createContext<CartApi | null>(null)
 
 export function CartProvider({
   children,
 }: {
-  readonly children: React.ReactNode;
+  readonly children: React.ReactNode
 }) {
-  const [state, dispatch] = useReducer(cartReducer, initialCart);
+  const [state, dispatch] = useReducer(cartReducer, initialCart)
 
-  const total = selectTotal(state);
+  const total = selectTotal(state)
 
   const value = useMemo<CartApi>(
     () => ({
@@ -32,35 +32,35 @@ export function CartProvider({
       total,
       add: (item) =>
         dispatch({
-          type: "add",
+          type: 'add',
           item,
         }),
       remove: (id) =>
         dispatch({
-          type: "remove",
+          type: 'remove',
           id,
         }),
       setQty: (id, qty) =>
         dispatch({
-          type: "setQty",
+          type: 'setQty',
           id,
           qty,
         }),
       clear: () =>
         dispatch({
-          type: "clear",
+          type: 'clear',
         }),
     }),
     [state, total],
-  );
+  )
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }
 
 export function useCart(): CartApi {
-  const value = useContext(CartContext);
+  const value = useContext(CartContext)
   if (!value) {
-    throw new Error("useCart must be used within a CartProvider");
+    throw new Error('useCart must be used within a CartProvider')
   }
-  return value;
+  return value
 }

@@ -1,15 +1,22 @@
-import { useCart } from "./CartContext";
-import "./Cart.css";
+import { useCart } from './CartContext'
+import './Cart.css'
+import { useRef } from 'react'
 
-// Sample products the demo can add to the cart. Integer prices keep the
-// displayed total easy to read and assert against.
 const SAMPLE_PRODUCTS = [
-  { id: "coffee", name: "Coffee", price: 10 },
-  { id: "bagel", name: "Bagel", price: 5 },
-] as const;
+  { id: 'coffee', name: 'Coffee', price: 10 },
+  { id: 'bagel', name: 'Bagel', price: 5 },
+] as const
 
+function focusAddButton(
+  id: string,
+  addButtonRefs: React.RefObject<Map<string, HTMLButtonElement>>,
+) {
+  addButtonRefs.current.get(id)?.focus()
+}
 export function Cart() {
-  const { state, total, add, remove, setQty, clear } = useCart();
+  const { state, total, add, remove, setQty, clear } = useCart()
+
+  const addButtonRefs = useRef(new Map<string, HTMLButtonElement>())
 
   return (
     <section aria-label="Shopping cart">
@@ -19,8 +26,15 @@ export function Cart() {
         <div>
           {SAMPLE_PRODUCTS.map((product) => (
             <button
-              className="add-button"
               key={product.id}
+              ref={(element) => {
+                if (element) {
+                  addButtonRefs.current.set(product.id, element)
+                } else {
+                  addButtonRefs.current.delete(product.id)
+                }
+              }}
+              className="add-button"
               type="button"
               onClick={() => add(product)}
             >
@@ -46,10 +60,24 @@ export function Cart() {
                     type="number"
                     min={0}
                     value={item.qty}
-                    onChange={(e) => setQty(item.id, Number(e.target.value))}
+                    onChange={(e) => {
+                      const qty = Number(e.target.value)
+
+                      setQty(item.id, qty)
+
+                      if (qty === 0) {
+                        focusAddButton(item.id, addButtonRefs)
+                      }
+                    }}
                   />
                 </label>
-                <button type="button" onClick={() => remove(item.id)}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    remove(item.id)
+                    focusAddButton(item.id, addButtonRefs)
+                  }}
+                >
                   Remove {item.name}
                 </button>
               </div>
@@ -66,5 +94,5 @@ export function Cart() {
         </button>
       </div>
     </section>
-  );
+  )
 }
