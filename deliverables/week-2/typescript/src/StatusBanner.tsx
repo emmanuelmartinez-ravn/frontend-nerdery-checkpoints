@@ -1,10 +1,10 @@
-import type { FormState } from "./formState";
-import { describeState } from "./formState";
-import "./StatusBanner.css";
+import type { FormState } from './formState'
+import { describeState } from './formState'
+import './StatusBanner.css'
 
 export function StatusBanner({ state }: { readonly state: FormState }) {
-  if (state.status !== "error") {
-    return <div className="ts-status-banner">{describeState(state)}</div>;
+  if (state.status !== 'error') {
+    return <div className="ts-status-banner">{describeState(state)}</div>
   }
   return (
     <div className="ts-error-container">
@@ -12,5 +12,5 @@ export function StatusBanner({ state }: { readonly state: FormState }) {
         {state.message}
       </span>
     </div>
-  );
+  )
 }
