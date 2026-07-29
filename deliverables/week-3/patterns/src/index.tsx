@@ -1,14 +1,14 @@
-import { Tabs } from "./Tabs";
-import "./index.css";
+import { Tabs } from './Tabs'
+import './index.css'
 
 export default function Demo() {
   return (
     <main
       style={{
-        fontFamily: "system-ui",
+        fontFamily: 'system-ui',
         maxWidth: 640,
-        margin: "1rem auto",
-        padding: "0 1rem",
+        margin: '1rem auto',
+        padding: '0 1rem',
       }}
     >
       <h1 className="tabs-title">W3 · Patterns — Compound Tabs</h1>
@@ -31,5 +31,5 @@ export default function Demo() {
         </Tabs.Panel>
       </Tabs>
     </main>
-  );
+  )
 }

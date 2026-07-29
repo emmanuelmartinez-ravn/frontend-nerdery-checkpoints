@@ -4,23 +4,23 @@ import {
   useMemo,
   useState,
   type ReactNode,
-} from "react";
-import "./Tabs.css";
+} from 'react'
+import './Tabs.css'
 
 interface TabsContextValue {
-  value: string;
-  setValue: (value: string) => void;
+  value: string
+  setValue: (value: string) => void
 }
 
-const TabsContext = createContext<TabsContextValue | null>(null);
+const TabsContext = createContext<TabsContextValue | null>(null)
 
 interface TabsProps {
-  readonly defaultValue: string;
-  readonly children: ReactNode;
+  readonly defaultValue: string
+  readonly children: ReactNode
 }
 
 function TabsRoot({ defaultValue, children }: TabsProps) {
-  const [value, setValue] = useState(defaultValue);
+  const [value, setValue] = useState(defaultValue)
 
   const contextValue = useMemo(
     () => ({
@@ -28,22 +28,22 @@ function TabsRoot({ defaultValue, children }: TabsProps) {
       setValue,
     }),
     [value],
-  );
+  )
 
   return (
     <TabsContext.Provider value={contextValue}>{children}</TabsContext.Provider>
-  );
+  )
 }
 export function useTabs(): TabsContextValue {
-  const value = useContext(TabsContext);
+  const value = useContext(TabsContext)
   if (!value) {
-    throw new Error("useTabs must be used within a TabsRoot");
+    throw new Error('useTabs must be used within a TabsRoot')
   }
-  return value;
+  return value
 }
 
 interface TabsListProps {
-  readonly children: ReactNode;
+  readonly children: ReactNode
 }
 
 function TabsList({ children }: TabsListProps) {
@@ -51,16 +51,16 @@ function TabsList({ children }: TabsListProps) {
     <div role="tablist" className="tabs-list">
       {children}
     </div>
-  );
+  )
 }
 
 interface TabProps {
-  readonly value: string;
-  readonly children: ReactNode;
+  readonly value: string
+  readonly children: ReactNode
 }
 
 function Tab({ value, children }: TabProps) {
-  const currentTab = useTabs();
+  const currentTab = useTabs()
   return (
     <button
       type="button"
@@ -69,30 +69,30 @@ function Tab({ value, children }: TabProps) {
       className="tab"
       onClick={() => {
         if (currentTab.value !== value) {
-          currentTab.setValue(value);
+          currentTab.setValue(value)
         }
       }}
     >
       {children}
     </button>
-  );
+  )
 }
 
 interface TabsPanelProps {
-  readonly value: string;
-  readonly children: ReactNode;
+  readonly value: string
+  readonly children: ReactNode
 }
 
 function TabsPanel({ value, children }: TabsPanelProps) {
-  const currentTab = useTabs();
+  const currentTab = useTabs()
   if (currentTab.value === value) {
-    return <div role="tabpanel">{children}</div>;
+    return <div role="tabpanel">{children}</div>
   }
-  return null;
+  return null
 }
 
 export const Tabs = Object.assign(TabsRoot, {
   List: TabsList,
   Tab,
   Panel: TabsPanel,
-});
+})
