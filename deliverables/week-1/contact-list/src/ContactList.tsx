@@ -1,6 +1,6 @@
-import type { Contact } from "./types";
-import { ContactCard } from "./ContactCard";
-import "./ContactList.css";
+import type { Contact } from './types'
+import { ContactCard } from './ContactCard'
+import './ContactList.css'
 
 export function ContactList({ contacts }: { readonly contacts: Contact[] }) {
   return (
@@ -9,7 +9,7 @@ export function ContactList({ contacts }: { readonly contacts: Contact[] }) {
         ? contacts.map((contact) => (
             <ContactCard key={contact.id} contact={contact} />
           ))
-        : "No contacts found"}
+        : 'No contacts found'}
     </div>
-  );
+  )
 }

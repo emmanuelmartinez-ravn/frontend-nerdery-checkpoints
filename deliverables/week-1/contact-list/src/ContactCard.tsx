@@ -1,5 +1,5 @@
-import "./ContactCard.css";
-import type { Contact } from "./types";
+import './ContactCard.css'
+import type { Contact } from './types'
 
 export function ContactCard({ contact }: { readonly contact: Contact }) {
   return (
@@ -8,5 +8,5 @@ export function ContactCard({ contact }: { readonly contact: Contact }) {
       <span className="contact-email">{contact.email}</span>
       <span className="contact-role">{contact.role}</span>
     </div>
-  );
+  )
 }

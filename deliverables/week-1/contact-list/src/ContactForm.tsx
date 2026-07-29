@@ -1,31 +1,35 @@
-import type { NewContact } from "./types";
-import { useState } from "react";
-import "./ContactForm.css";
+import type { NewContact } from './types'
+import { useState } from 'react'
+import './ContactForm.css'
 
 function formToContact(formData: FormData): NewContact {
   return {
-    name: formData.get("name") as string,
-    email: formData.get("email") as string,
-    role: formData.get("role") as string,
-  };
+    name: formData.get('name') as string,
+    email: formData.get('email') as string,
+    role: formData.get('role') as string,
+  }
 }
 
 function validateEmail(email: string) {
-  return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$/.test(email);
+  return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$/.test(email)
 }
 
 function validateContact(contact: NewContact): string {
-  const errors = [];
+  const errors: string[] = []
 
-  if (!contact.name) {
-    errors.push("Name is required");
+  if (!contact.name || contact.name.trim() === '') {
+    errors.push('Name is required')
   }
 
   if (!validateEmail(contact.email)) {
-    errors.push("A valid email is required");
+    errors.push('A valid email is required')
   }
 
-  return errors.join(" & ");
+  if (!contact.role || contact.role.trim() === '') {
+    errors.push('Role is required')
+  }
+
+  return errors.join(' | ')
 }
 
 function handleSubmit(
@@ -33,32 +37,34 @@ function handleSubmit(
   onAdd: (contact: NewContact) => void,
   setError: React.Dispatch<React.SetStateAction<string>>,
 ) {
-  event.preventDefault();
+  event.preventDefault()
 
-  const formData = new FormData(event.currentTarget);
-  const newContact = formToContact(formData);
+  const formData = new FormData(event.currentTarget)
+  const newContact = formToContact(formData)
 
-  const error = validateContact(newContact);
+  const errors = validateContact(newContact)
 
-  setError(error);
+  setError(errors)
 
-  if (error) {
-    return;
+  if (errors.length > 0) {
+    return
   }
 
-  onAdd(newContact);
+  onAdd(newContact)
+
+  event.target.reset()
 }
 
 export function ContactForm({
   onAdd,
 }: {
-  readonly onAdd: (contact: NewContact) => void;
+  readonly onAdd: (contact: NewContact) => void
 }) {
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<string>('')
 
   return (
     <form
-      onSubmit={(event) => handleSubmit(event, onAdd, setError)}
+      onSubmit={(event) => handleSubmit(event, onAdd, setErrors)}
       className="contact-form"
     >
       <h2 className="contact-form-title">Add Contact</h2>
@@ -68,7 +74,7 @@ export function ContactForm({
           type="text"
           name="name"
           onChange={() => {
-            setError("");
+            setErrors('')
           }}
           placeholder="John Doe"
           className="contact-form-input"
@@ -81,7 +87,7 @@ export function ContactForm({
             type="email"
             name="email"
             onChange={() => {
-              setError("");
+              setErrors('')
             }}
             placeholder="john@example.com"
             className="contact-form-input"
@@ -92,19 +98,22 @@ export function ContactForm({
           <input
             type="text"
             name="role"
+            onChange={() => {
+              setErrors('')
+            }}
             placeholder="Engineer"
             className="contact-form-input"
           ></input>
         </label>
       </div>
-      {error && (
-        <span role="alert" style={{ color: "red" }}>
-          {error}
-        </span>
-      )}
+
+      <span role="alert" style={{ color: 'red' }}>
+        {errors}
+      </span>
+
       <button type="submit" className="contact-form-submit">
         Add Contact
       </button>
     </form>
-  );
+  )
 }
