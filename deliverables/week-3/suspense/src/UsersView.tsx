@@ -1,23 +1,23 @@
-import { Suspense, use, useState } from "react";
-import { User, fetchUsers } from "./api";
-import { ErrorBoundary } from "./ErrorBoundary";
-import "./UsersView.css";
+import { Suspense, use, useState } from 'react'
+import { User, fetchUsers } from './api'
+import { ErrorBoundary } from './ErrorBoundary'
+import './UsersView.css'
 
-let usersCache: Promise<User[]> | undefined;
+let usersCache: Promise<User[]> | undefined
 
 function getUsers(): Promise<User[]> {
-  const usersPromise = usersCache ?? fetchUsers();
-  usersCache = usersPromise;
-  return usersPromise;
+  const usersPromise = usersCache ?? fetchUsers()
+  usersCache = usersPromise
+  return usersPromise
 }
 
 function clearUsersCache(setKey: React.Dispatch<React.SetStateAction<number>>) {
-  usersCache = undefined;
-  setKey((key) => key + 1);
+  usersCache = undefined
+  setKey((key) => key + 1)
 }
 
 function UsersList() {
-  const users = use(getUsers());
+  const users = use(getUsers())
 
   return (
     <ul className="suspense-list">
@@ -25,17 +25,17 @@ function UsersList() {
         <li key={user.id}>{user.name}</li>
       ))}
     </ul>
-  );
+  )
 }
 
 export function UsersView() {
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState(0)
 
   return (
     <ErrorBoundary
       fallback={
         <div>
-          <p>Error loading users</p>
+          <p role="alert">Error loading users</p>
           <button onClick={() => clearUsersCache(setKey)}>Try again</button>
         </div>
       }
@@ -46,5 +46,5 @@ export function UsersView() {
         <UsersList></UsersList>
       </Suspense>
     </ErrorBoundary>
-  );
+  )
 }
