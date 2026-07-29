@@ -1,17 +1,17 @@
-import { useEffect, useId, useRef, useState } from "react";
-import { useDebouncedValue } from "./useDebouncedValue";
-import "./DebouncedSearch.css";
+import { useEffect, useId, useRef, useState } from 'react'
+import { useDebouncedValue } from './useDebouncedValue'
+import './DebouncedSearch.css'
 
 export function DebouncedSearch() {
-  const inputId = useId();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [query, setQuery] = useState<string>("");
+  const inputId = useId()
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [query, setQuery] = useState<string>('')
 
   useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+    inputRef.current?.focus()
+  }, [])
 
-  const debouncedValue = useDebouncedValue(query, 300);
+  const debouncedValue = useDebouncedValue(query, 300)
 
   return (
     <section className="debounced-search">
@@ -26,5 +26,5 @@ export function DebouncedSearch() {
       ></input>
       <span>Searching: {debouncedValue}</span>
     </section>
-  );
+  )
 }
