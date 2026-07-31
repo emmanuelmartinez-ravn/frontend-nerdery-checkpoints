@@ -8,6 +8,7 @@ import { useUsers, useSelectedUser } from './AppState'
  */
 export function SelectedUserBadge() {
   const { users } = useUsers()
+
   const { selectedId } = useSelectedUser()
 
   const selected = users.find((user) => user.id === selectedId)
